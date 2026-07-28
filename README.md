@@ -20,6 +20,16 @@ SDKs created and maintained by Alex, which are located in this repository. Pull 
 - [Unity SDK](./Unity/README.md)
 - [Godot SDK](./Godot/README.md)
 
+### Example Projects
+Open-source game integrations created with the Neuro SDK:
+
+- [Slay the Spire 2](https://github.com/VedalAI/neuro-sts2)
+- [Inscryption](https://github.com/VedalAI/neuro-inscryption)
+- [Buckshot Roulette](https://github.com/VedalAI/neuro-buckshotroulette-reference) (reference source code)
+- [Hollow Knight](https://github.com/VedalAI/neuro-hollow-knight)
+- [Cyberpunk 2077](https://github.com/VedalAI/neuro-cyberpunk)
+- [Pokémon Platinum](https://github.com/VedalAI/neuro-pokemon-platinum)
+
 ### Tools
 - [Randy](./Randy/README.md) is a simple bot that mimics the Neuro API. It makes random actions and can be used to test your integration.
 

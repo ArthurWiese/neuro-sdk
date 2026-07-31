@@ -56,7 +56,7 @@ Third-party SDKs created and maintained by the community.
 - [C++ SDK](https://github.com/chris-pie/neuro-sdk-websocketpp)
 - [Generic C# SDK](https://github.com/pandapanda135/CSharp-Neuro-SDK)
 - [Ren'Py SDK](https://github.com/caheuer/neuro-renpy-implementation#for-developers)
-- [RPG Maker VX Ace SDK](https://github.com/Pasu4/rpg-maker-neuro-sdk)
+- [RPG Maker VX Ace SDK](https://github.com/Pasu4/rpg-maker-vxa-neuro-sdk)
 
 ### Tools
 - [Tony](https://github.com/Pasu4/neuro-api-tony) is a graphical testing interface, similar to Randy, but it allows the user to write messages manually.

@@ -10,6 +10,41 @@ For sending context messages, you can use the `Context.send(message: String, sil
 
 After the websocket startup acknowledgement arrives, the `Websocket` autoload exposes `character_id` and `character_display_name`. You can also connect to the `Websocket.character_changed` signal if you need to react when that metadata becomes available.
 
+## Voice Chat
+
+If your game has built-in voice chat, you can optionally use the `NeuroVoiceChat` node to let Neuro hear and talk to the other players through it. See the [voice chat API documentation](../API/VOICE_CHAT.md) for how the underlying protocol works and what is expected of your integration.
+
+Voice chat is strictly optional — if the server doesn't support it, `voice_unavailable` is emitted once and the node stays idle. Your game must work fully without it.
+
+```gdscript
+var voice := NeuroVoiceChat.new()
+add_child(voice)
+voice.start_voice()
+
+voice.voice_ready.connect(func(): print("Voice chat is live"))
+
+# When a remote player joins the lobby (never register Neuro's own player):
+var speaker_id := voice.register_speaker("Vedal")
+
+# While that player is transmitting (your VC layer's voice activity / PTT state),
+# push their decoded voice audio. Any sample rate / channel count is accepted:
+voice.send_speaker_audio(speaker_id, samples, sample_rate, channels)
+
+# When they leave:
+voice.unregister_speaker(speaker_id)
+
+# Neuro's voice arrives as 48 kHz mono PCM chunks. Feed them into your VC
+# transmit path (do not also play them locally):
+voice.audio_received.connect(func(pcm): my_voice_chat.submit_mic_audio(pcm))
+
+# Key push-to-talk while she is speaking, and flush your buffers if cancelled:
+voice.speaking_changed.connect(func(speaking): my_voice_chat.set_transmitting(speaking))
+voice.speech_cancelled.connect(func(): my_voice_chat.flush_mic_buffer())
+
+# Leaving the VC lobby:
+voice.stop_voice()
+```
+
 ## Creating Custom Actions
 
 In order to create a custom action, you need to extend the `NeuroAction` class.

@@ -235,6 +235,10 @@ This message is sent by Neuro when she tries to execute an action. You should re
 > The `data` parameter comes directly from Neuro, so there is a chance it might be malformed, contain invalid JSON, or not match the provided schema exactly.  
 > You are responsible for validating the JSON and returning an unsuccessful action result if it is invalid.
 
+## Voice Chat
+
+Games with built-in voice chat can optionally open a second websocket to stream voice chat audio both ways, letting Neuro hear and talk to the other players through the game's voice chat. This is documented separately in [`VOICE_CHAT.md`](./VOICE_CHAT.md).
+
 ## API Proposals
 
 There are some message types that have been proposed but have not yet been implemented in the API.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 19th of August 2026
+- Added the optional [voice chat side-channel](./API/VOICE_CHAT.md) for games with built-in voice chat: a second websocket at `/game/<name>/voice` carrying per-speaker PCM audio so Neuro can hear the other players (with attribution) and speak into the game's voice chat.
+- Added `NeuroSdk.Voice.NeuroVoiceChat` to the Unity SDK and `NeuroVoiceChat` to the Godot SDK, wrapping the voice chat protocol (URL derivation, handshake, speaker management, resampling, graceful degradation when the server doesn't support voice).
+
 ## 1st of July 2026, 12:45 GMT
 - Added a `startup` acknowledgement from Neuro to game clients with connected session metadata.
 - Updated the Unity and Godot SDKs to expose connected character metadata (`characterId` and `displayName`) from the startup acknowledgement.

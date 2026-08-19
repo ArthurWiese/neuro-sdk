@@ -10,6 +10,39 @@ For sending context messages, you can use the `static void Context.Send(string m
 
 After the websocket startup acknowledgement arrives, `WebsocketConnection.Instance.Character` contains the connected character's `CharacterId` and `DisplayName`. You can also listen to `WebsocketConnection.onCharacterChanged` if you need to react when that metadata becomes available.
 
+## Voice Chat
+
+If your game has built-in voice chat, you can optionally use `NeuroSdk.Voice.NeuroVoiceChat` to let Neuro hear and talk to the other players through it. See the [voice chat API documentation](../API/VOICE_CHAT.md) for how the underlying protocol works and what is expected of your integration.
+
+Voice chat is strictly optional — if the server doesn't support it, `onUnavailable` fires once and the component stays idle. Your game must work fully without it.
+
+```cs
+NeuroVoiceChat voice = NeuroVoiceChat.Connect(); // after NeuroSdkSetup.Initialize / the prefab is up
+
+voice.onReady!.AddListener(() => Debug.Log("Voice chat is live"));
+
+// When a remote player joins the lobby (never register Neuro's own player):
+int speakerId = voice.RegisterSpeaker("Vedal");
+
+// While that player is transmitting (your VC layer's voice activity / PTT state),
+// push their decoded voice audio. Any sample rate / channel count is accepted:
+voice.SendSpeakerAudio(speakerId, samples, sampleRate, channels);
+
+// When they leave:
+voice.UnregisterSpeaker(speakerId);
+
+// Neuro's voice arrives as 48 kHz mono PCM chunks. Feed them into your VC
+// transmit path (do not also play them locally):
+voice.onAudioReceived!.AddListener(pcm => myVoiceChat.SubmitMicAudio(pcm));
+
+// Key push-to-talk while she is speaking, and flush your buffers if cancelled:
+voice.onSpeakingChanged!.AddListener(speaking => myVoiceChat.SetTransmitting(speaking));
+voice.onCancelled!.AddListener(() => myVoiceChat.FlushMicBuffer());
+
+// Leaving the VC lobby:
+voice.Disconnect();
+```
+
 ## Creating Custom Actions
 
 In order to create a custom action, you can extend either the `NeuroAction` or `NeuroAction<T>` class. The difference is explained below.

@@ -1,5 +1,12 @@
 # Changelog
 
+## 20th of August 2026
+- Added [`BEST_PRACTICES.md`](./API/BEST_PRACTICES.md), answering long-standing integration questions about context formatting, action design, result handling, forces and reconnection.
+- Documented the `speech_finished` message. Clients should almost always wait for `isFinal: true`, since she has not really finished speaking until then.
+- Documented that unrecognized commands and malformed messages are silently ignored, and that custom commands used by tooling should be vendor-prefixed.
+- Corrected the `actions/register` documentation: registering an already-registered action name replaces the previous definition (it was previously documented as being ignored).
+- Documented the server-side timeout on `action/result`: after about 30 seconds the action is treated as failed and late results are discarded.
+
 ## 19th of August 2026
 - Added the optional [voice chat side-channel](./API/VOICE_CHAT.md) for games with built-in voice chat: a second websocket at `/game/<name>/voice` carrying per-speaker PCM audio so Neuro can hear the other players (with attribution) and speak into the game's voice chat.
 - Added `NeuroSdk.Voice.NeuroVoiceChat` to the Unity SDK and `NeuroVoiceChat` to the Godot SDK, wrapping the voice chat protocol (URL derivation, handshake, speaker management, resampling, graceful degradation when the server doesn't support voice).

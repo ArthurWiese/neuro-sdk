@@ -30,6 +30,9 @@ Messages sent by Neuro (server) to the game (client) have the following format:
 - `game`: The game name. This is used to identify the game. It should _always_ be the same and should not change. You should use the game's display name, including any spaces and symbols (e.g. `"Buckshot Roulette"`). The server will not include this field.
 - `data`: The command data. This object is different depending on which command you are sending/receiving, and some commands may not have any data, in which case this object will be either `undefined` or `{}`.
 
+> [!Note]
+> Messages with an unrecognized `command` (and malformed messages in general) are silently ignored: no error response, no disconnect. Tooling that defines custom commands for its own purposes should vendor-prefix them (e.g. `"neuro-relay/..."`) to avoid colliding with future API commands.
+
 ## Common Types
 
 The following data types are used throughout the API.
@@ -107,7 +110,7 @@ This message registers one or more actions for Neuro to use.
 ```
 
 #### Parameters
-- `actions`: An array of actions to be registered. If you try to register an action that is already registered, it will be ignored.
+- `actions`: An array of actions to be registered. If you register an action with a name that is already registered, the new definition replaces the old one.
 <!-- - `main_thread: bool?`: This field should be omitted in 99.99% of cases. Its only use is to fix one very very specific problem with very complex games. But you should probably not change it. -->
 
 ### Unregister Actions
@@ -165,7 +168,8 @@ This message needs to be sent as soon as possible after an action is validated, 
 > [!Important]  
 > Until you send an action result, Neuro will just be waiting for the result of her action!  
 > Please make sure to send this as soon as possible.   
-> It should usually be sent after validating the action parameters, before it is actually executed in-game
+> It should usually be sent after validating the action parameters, before it is actually executed in-game.  
+> If you take too long (currently more than about 30 seconds), the server will give up, treat the action as failed, and discard your result if it ever arrives.
 
 ```ts
 {
@@ -234,6 +238,26 @@ This message is sent by Neuro when she tries to execute an action. You should re
 > [!Caution]  
 > The `data` parameter comes directly from Neuro, so there is a chance it might be malformed, contain invalid JSON, or not match the provided schema exactly.  
 > You are responsible for validating the JSON and returning an unsuccessful action result if it is invalid.
+
+### Speech Finished
+
+This message is sent while Neuro is speaking. A single response may produce several of these messages.
+
+```ts
+{
+    "command": "speech_finished",
+    "data": {
+        "isFinal": boolean,
+        "cancelled": boolean?,
+        "reason": string?
+    }
+}
+```
+
+#### Parameters
+- `isFinal`: Whether she has finished what she is currently saying. You should almost always wait for `isFinal` to be `true`, because if it is `false` she has not actually finished speaking.
+- `cancelled`: Set to `true` if her speech was cut off instead of completing normally. A cancelled utterance still sends a final message with `isFinal` set to `true`, so you will never be left waiting for one.
+- `reason`: If cancelled, a short description of why (e.g. `"interrupted"`).
 
 ## Voice Chat
 

@@ -4,6 +4,8 @@ The Neuro API works by communicating between the game and Neuro using a websocke
 
 You can view the API specification [here](./SPECIFICATION.md).
 
+For guidance on how to structure actions and context so Neuro plays your game well, see the [integration best practices](./BEST_PRACTICES.md).
+
 Games with built-in voice chat can optionally use the [voice chat side-channel](./VOICE_CHAT.md) to let Neuro hear and talk to the other players through the game's voice chat.
 
 ## Additional Guide for Using Actions

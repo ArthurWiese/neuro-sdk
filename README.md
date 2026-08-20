@@ -57,6 +57,7 @@ Third-party SDKs created and maintained by the community.
 - [Generic C# SDK](https://github.com/pandapanda135/CSharp-Neuro-SDK)
 - [Ren'Py SDK](https://github.com/caheuer/neuro-renpy-implementation#for-developers)
 - [RPG Maker VX Ace SDK](https://github.com/Pasu4/rpg-maker-vxa-neuro-sdk)
+- [StarCraft II SDK](https://github.com/ArthurWiese/SC2-Neuro-API-Integration)
 
 ### Tools
 - [Tony](https://github.com/Pasu4/neuro-api-tony) is a graphical testing interface, similar to Randy, but it allows the user to write messages manually.
